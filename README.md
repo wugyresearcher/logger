@@ -7,7 +7,7 @@ PHP library to send realtime logs to Logz.io, an ELK as a service.
 Install with composer:
 
 ```sh
-$ composer require vagnercsouza/logger
+$ composer require wugyresearcher/logger
 ```
 
 ### Usage
@@ -15,6 +15,7 @@ $ composer require vagnercsouza/logger
 First of all, you need an account on Logz.io. Then, go to you profile settings and get your api key (token).
 
 #### Configure
+
 To configure the library, you just need to get an instance of Logger and set the api key. You need to do it once:
 
 ```sh
@@ -28,6 +29,7 @@ You can eather set an application name to identify the logs if you have more tha
 ```
 
 #### Sending logs
+
 To send a log, you need to get an instance of Logger and use one of the following functions:
 
 ```sh
@@ -45,6 +47,7 @@ To send a log, you need to get an instance of Logger and use one of the followin
 ```
 
 #### Sending multiple logs
+
 By default, the log is delivered to Logz.io right after you call the info, warning, error or debug functions. If you need to deliver more than one log, you can enable the bulk option, which will wait until you call the send function to actually deliver the logs to Logz.io.
 
 ```sh
@@ -61,6 +64,7 @@ By default, the log is delivered to Logz.io right after you call the info, warni
 ```
 
 #### Sending parameters
+
 If you need to send parameters with the log, you just need to pass an array as second parameter of the logs functions:
 
 ```sh
@@ -80,7 +84,6 @@ If you need to send parameters with the log, you just need to pass an array as s
 ### Contributing
 
 To contribute, create a fork, make your changes, make tests, test and create a PR.
-
 
 ### License
 

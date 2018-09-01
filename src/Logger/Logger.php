@@ -26,6 +26,11 @@ class Logger
      */
     private $bulkLogs = [];
 
+    /*
+     * @var boolean Echo logs
+     */
+    private $output = false;
+
     /**
      * Get an instance.
      */
@@ -68,6 +73,16 @@ class Logger
     public function setBulk($bulk)
     {
         $this->bulk = $bulk;
+    }
+
+    /**
+     * Enable or disable Output mode
+     *
+     * @param boolean $apiKey
+     */
+    public function setOutput($output)
+    {
+        $this->output = $output;
     }
 
     /**
@@ -144,13 +159,35 @@ class Logger
      * @param string $message The log message
      * @param array $data Additional data
      */
-    private function log($type, $message, array $data) 
+    private function log($type, $message, array $data)
     {
+        if ($this->output) {
+            echo date('c') . ' [';
+            switch ($type) {
+                case 'info':
+                    echo \Logger\Console::light_blue('INFO');
+                    break;
+                case 'warning':
+                    echo \Logger\Console::yellow('WARN');
+                    break;
+                case 'error':
+                    echo \Logger\Console::red('ERRO');
+                    break;
+                case 'debug':
+                    echo \Logger\Console::light_cyan('DEBG');
+                    break;
+                default:
+                    echo \Logger\Console::light_gray($type);
+            }
+
+            echo '] ' . $message . ' ' . json_encode($data) . "\n";
+
+        }
         if ($this->bulk) {
             $this->bulkLogs[] = [
                 'type' => $type,
                 'message' => $message,
-                'data' => $data
+                'data' => $data,
             ];
         } else {
             $this->sendLog(
@@ -174,9 +211,9 @@ class Logger
             $response = $this->getClient()->post('/', [
                 'query' => [
                     'token' => $this->apiKey,
-                    'type' => $type
+                    'type' => $type,
                 ],
-                'body' => $log
+                'body' => $log,
             ]);
 
             echo $response->getBody();
@@ -191,12 +228,13 @@ class Logger
      * @param string $message The log message
      * @param array $data Additional data
      */
-    private function makeLog($message, array $data = []) {
+    private function makeLog($message, array $data = [])
+    {
         return json_encode(
             array_merge(
                 [
                     'message' => $message,
-                    'application' => $this->application
+                    'application' => $this->application,
                 ],
                 $data
             )
@@ -221,7 +259,7 @@ class Logger
     private function getClient()
     {
         return new \GuzzleHttp\Client([
-            'base_uri' => 'https://listener.logz.io:8071'
+            'base_uri' => 'https://listener.logz.io:8071',
         ]);
     }
 
