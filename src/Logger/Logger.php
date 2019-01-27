@@ -205,7 +205,7 @@ class Logger
      */
     private function sendLog($log, $type = '')
     {
-        $this->validateSendLog();
+        if( !$this->apiKey ) return;
 
         try {
             $response = $this->getClient()->post('/', [
@@ -241,15 +241,6 @@ class Logger
         );
     }
 
-    /**
-     * Validate if log can be sent
-     */
-    private function validateSendLog()
-    {
-        if (!$this->apiKey) {
-            throw new LoggerException('You need to specify the Logz.io api key.');
-        }
-    }
 
     /**
      * Get the Guzzle Client
